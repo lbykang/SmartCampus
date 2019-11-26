@@ -3,13 +3,19 @@ class Student{
 -String id
 -String studyId
 -String name
--Interger gender
--Interger college
--Interger profession
+-Integer gender
+-Integer college
+-Integer profession
 -String grade
 -String tel
+-Integer people
+-Integer politicalStatus
 -String idCard
+-Integer education
+-Integer degree
 -String address
+-Date admissionTime
+-Date graduateTime
 toString()
 }
 @enduml
