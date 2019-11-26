@@ -1,0 +1,15 @@
+@startuml
+class Student{
+-String id
+-String studyId
+-String name
+-Interger gender
+-Interger college
+-Interger profession
+-String grade
+-String tel
+-String idCard
+-String address
+toString()
+}
+@enduml
