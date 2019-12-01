@@ -1,22 +1,61 @@
 @startuml
 class Student{
--String id
--String studyId
--String password
--String name
--Integer gender
--Integer college
--Integer profession
--String grade
--String tel
--String idCard
--String homeTown
--String photo
--String creator
--Date creatTime
--String updater
--Date updateTime
+-String cId
+-String cStudyId
+-String cPassword
+-String cName
+-Integer nGender
+-Integer nCollege
+-Integer nProfession
+-String cGrade
+-String cTel
+-Integer nPeople
+-Integer nPoliticalStatus
+-String cIdCard
+-Integer nEducation
+-Integer nDegree
+-String cHomeTown
+-String cPhoto
+-String cCreator
+-Date dCreatTime
+-String cUpdater
+-Date dUpdateTime
 toString()
 }
-'class Builder{}
+class Builder{
+-String cId
+-String cStudyId
+-String cPassword
+-String cName
+-Integer nGender
+-Integer nCollege
+-Integer nProfession
+-String cGrade
+-String cTel
+-Integer nPeople
+-Integer nPoliticalStatus
+-String cIdCard
+-Integer nEducation
+-Integer nDegree
+-String cHomeTown
+-String cPhoto
+-String cCreator
+-Date dCreatTime
+-String cUpdater
+-Date dUpdateTime
+Builder(String cId,String cStudyId,String cName,Integer nGender,
+Integer nCollege,Integer nProfession,String cGrade,String cTel)
+Builder nPeople(Integer nPeople)
+Builder nPoliticalStatus(Integer nPoliticalStatus)
+Builder cIdCard(String cIdCard)
+Builder nEducation(Integer nEducation)
+Builder nDegree(Integer nDegree)
+Builder cHomeTown(String cHomeTown)
+Builder cPhoto(String cPhoto)
+Builder cCreator(String cCreator)
+Builder dCreatTime(Date dCreatTime)
+Builder cUpdater(String cUpdater)
+Builder dUpdateTime(Date dUpdateTime)
+}
+Student o- Builder
 @enduml
