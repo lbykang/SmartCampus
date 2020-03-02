@@ -17,7 +17,7 @@ class Student{
 -String cHomeTown
 -String cPhoto
 -String cCreator
--Date dCreatTime
+-Date dCreateTime
 -String cUpdater
 -Date dUpdateTime
 toString()
