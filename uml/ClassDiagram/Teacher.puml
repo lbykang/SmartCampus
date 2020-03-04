@@ -1,16 +1,28 @@
 @startuml
-'class Teacher{
-'-String id
-'-String jobNumber
-'-String password
-'-Integer gender
-'-Integer college
-'-String office
-'-String tel
-'}
-Class01 <|-- Class02
-Class03 *-- Class04
-Class05 o-- Class06
-Class07 .. Class08
-Class09 -- Class10
+class Teacher{
+-Long lId
+-String cWorkId
+-String cPassword
+-String cName
+-Integer nGender
+-Long lCollege
+-String cTel
+-String cLandline
+-String cEmail
+-Integer nPeople
+-Integer nPoliticalStatus
+-String cIdCard
+-String cHomeTown
+-String cPhoto
+-Integer nEducation
+-Integer nDegree
+-Integer nStaffType
+-Integer nRankType
+-String cCreator
+-Date dCreateTime
+-String cUpdater
+-Date dUpdateTime
+toString()
+}
+
 @enduml

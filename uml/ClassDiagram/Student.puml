@@ -1,61 +1,25 @@
 @startuml
 class Student{
--String cId
+-Long lId
 -String cStudyId
 -String cPassword
 -String cName
 -Integer nGender
--Integer nCollege
--Integer nProfession
+-Long lProfession
 -String cGrade
 -String cTel
+-String cEmail
 -Integer nPeople
 -Integer nPoliticalStatus
 -String cIdCard
--Integer nEducation
--Integer nDegree
 -String cHomeTown
 -String cPhoto
+-Date dAdmissionTime
 -String cCreator
 -Date dCreateTime
 -String cUpdater
 -Date dUpdateTime
 toString()
 }
-class Builder{
--String cId
--String cStudyId
--String cPassword
--String cName
--Integer nGender
--Integer nCollege
--Integer nProfession
--String cGrade
--String cTel
--Integer nPeople
--Integer nPoliticalStatus
--String cIdCard
--Integer nEducation
--Integer nDegree
--String cHomeTown
--String cPhoto
--String cCreator
--Date dCreatTime
--String cUpdater
--Date dUpdateTime
-Builder(String cId,String cStudyId,String cName,Integer nGender,
-Integer nCollege,Integer nProfession,String cGrade,String cTel)
-Builder nPeople(Integer nPeople)
-Builder nPoliticalStatus(Integer nPoliticalStatus)
-Builder cIdCard(String cIdCard)
-Builder nEducation(Integer nEducation)
-Builder nDegree(Integer nDegree)
-Builder cHomeTown(String cHomeTown)
-Builder cPhoto(String cPhoto)
-Builder cCreator(String cCreator)
-Builder dCreatTime(Date dCreatTime)
-Builder cUpdater(String cUpdater)
-Builder dUpdateTime(Date dUpdateTime)
-}
-Student o- Builder
+
 @enduml
