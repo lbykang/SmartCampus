@@ -73,6 +73,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_teacher` (
   `degree` BIGINT(18) UNSIGNED NOT NULL COMMENT '学位类别（dic）',
   `staff_type` BIGINT(18) NULL COMMENT '职工类别（dic）',
   `rank_type` BIGINT(18) NULL COMMENT '等级类别（dic）',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `tel_UNIQUE` (`tel` ASC),
   UNIQUE INDEX `landline_UNIQUE` (`landline` ASC),
@@ -92,6 +98,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_college` (
   `dean` BIGINT(18) NOT NULL COMMENT '院长（FK）',
   `contact` BIGINT(18) NOT NULL COMMENT '联系人（FK）',
   `sort` TINYINT(1) UNSIGNED NULL COMMENT '排序码',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `mark_UNIQUE` (`mark` ASC))
 ENGINE = InnoDB;
@@ -107,6 +119,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_profession` (
   `dean` BIGINT(18) NOT NULL COMMENT '专业主任',
   `contact` BIGINT(18) NOT NULL COMMENT '联系人',
   `sort` TINYINT(1) UNSIGNED NULL COMMENT '排序码',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `mark_UNIQUE` (`mark` ASC))
 ENGINE = InnoDB;
@@ -121,6 +139,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_role` (
   `name` VARCHAR(32) NOT NULL COMMENT '角色名称',
   `description` VARCHAR(32) NOT NULL COMMENT '描述',
   `sort` TINYINT(1) UNSIGNED NULL COMMENT '排序码',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -145,6 +169,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_authority` (
   `mark` VARCHAR(32) NOT NULL COMMENT '权限标识',
   `description` VARCHAR(32) NOT NULL COMMENT '描述',
   `sort` TINYINT(1) UNSIGNED NULL COMMENT '排序码',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -166,6 +196,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_dictionary_type` (
   `id` BIGINT(18) NOT NULL,
   `name` VARCHAR(16) NOT NULL COMMENT '字典类型名称',
   `type` VARCHAR(16) NOT NULL COMMENT '字典类型',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -178,6 +214,12 @@ CREATE TABLE IF NOT EXISTS `citymis`.`system_dictionary_data` (
   `name` VARCHAR(16) NOT NULL COMMENT '字典数据名称',
   `value` TINYINT(1) NOT NULL COMMENT '键值',
   `type` BIGINT(18) NOT NULL COMMENT '字典类型（FK）',
+  `is_enabled` BIGINT(18) UNSIGNED NOT NULL COMMENT '启用标识（dic: 1 表示是，0 表示否）',
+  `creator` BIGINT(18) NOT NULL COMMENT '创建者（FK）',
+  `gmt_create` TIMESTAMP(6) NOT NULL COMMENT '创建时间',
+  `updater` BIGINT(18) NULL COMMENT '修改者（FK）',
+  `gmt_modified` TIMESTAMP(6) NULL COMMENT '修改时间',
+  `is_deleted` BIGINT(18) UNSIGNED NOT NULL COMMENT '删除标识（ dic:1 表示是，0 表示否）',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
