@@ -36,7 +36,8 @@ public class MpGenerator {
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir(PATH);
         gc.setAuthor("mirror6");
-        gc.setOpen(false);
+        gc.setOpen(true);
+        gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
@@ -50,8 +51,8 @@ public class MpGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-//        pc.setParent("com.city.system");
-        pc.setModuleName("city.system");
+        pc.setParent("com.city");
+        pc.setModuleName("system");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setXml("mapper");
@@ -65,11 +66,12 @@ public class MpGenerator {
         // 表名生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass("BaseEntity");
+        strategy.setSuperEntityClass("com.city.BaseEntity");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         //此处是的表前缀,实体类不会生成
         strategy.setTablePrefix("system_");
+//        strategy.setTablePrefix("base_");
         strategy.setSuperEntityColumns("id");
         strategy.setSuperEntityColumns("is_enabled");
         strategy.setSuperEntityColumns("creator");
