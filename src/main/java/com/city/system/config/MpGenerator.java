@@ -43,7 +43,7 @@ public class MpGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/citymis?serverTimezone=GMT%2B8&amp&useSSL=false&autoReconnect=true&failOverReadOnly=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/system?serverTimezone=GMT%2B8&amp&useSSL=false&autoReconnect=true&failOverReadOnly=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("mirror6");
@@ -71,15 +71,7 @@ public class MpGenerator {
         strategy.setRestControllerStyle(true);
         //此处是的表前缀,实体类不会生成
         strategy.setTablePrefix("system_");
-//        strategy.setTablePrefix("base_");
-        strategy.setSuperEntityColumns("id");
-        strategy.setSuperEntityColumns("is_enabled");
-        strategy.setSuperEntityColumns("creator");
-        strategy.setSuperEntityColumns("gmt_create");
-        strategy.setSuperEntityColumns("updater");
-        strategy.setSuperEntityColumns("gmt_modified");
-        strategy.setSuperEntityColumns("is_deleted");
-        //【实体】是否为lombok模型（默认 false）
+        strategy.setSuperEntityColumns("id", "is_enabled", "creator", "gmt_create", "updater", "gmt_modified", "is_deleted");
         strategy.setEntityLombokModel(true);
         mpg.setStrategy(strategy);
 
