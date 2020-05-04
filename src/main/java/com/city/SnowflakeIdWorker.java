@@ -1,4 +1,4 @@
-package com.city.system;
+package com.city;
 
 /**
  * SnowflakeIdWorker
