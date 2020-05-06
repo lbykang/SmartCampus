@@ -1,9 +1,6 @@
 package com.city.system.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -20,22 +17,24 @@ public class BaseEntity {
     /**
      * 默认0
      */
-    private int isEnabled;
+    @TableField(value = "is_enabled")
+    private int enabled;
 
-    private Long creator;
+    private Long createUserId;
 
-    @TableField(fill= FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
-    private Long updater;
+    private Long updateUserId;
 
-    @TableField(fill= FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
     /**
      * 默认0
      */
     @TableLogic
-    private int isDeleted;
+    @TableField(value = "is_deleted")
+    private int deleted;
 
 }

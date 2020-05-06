@@ -1,4 +1,4 @@
-package com.city.handle;
+package com.city.common.handle;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +9,11 @@ import java.util.Date;
 
 /**
  * @author mirror6
+ * @deprecated  一定不要忘记把处理器加到IOC容器中！
  */
 @Slf4j
-@Component // 一定不要忘记把处理器加到IOC容器中！
+@Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
-    // 插入时的填充策略
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("start insert fill.....");
@@ -22,7 +22,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("gmtModified",new Date(),metaObject);
     }
 
-    // 更新时的填充策略
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill.....");
