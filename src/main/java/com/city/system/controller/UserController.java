@@ -3,10 +3,9 @@ package com.city.system.controller;
 
 import com.city.system.entity.User;
 import com.city.system.service.IUserService;
-import com.city.common.util.ResponseFactory;
-import com.city.common.util.Result;
+import com.city.common.response.ResponseFactory;
+import com.city.common.response.Result;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 

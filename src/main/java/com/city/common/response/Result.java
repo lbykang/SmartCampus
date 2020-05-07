@@ -1,4 +1,4 @@
-package com.city.common.util;
+package com.city.common.response;
 
 import lombok.Data;
 

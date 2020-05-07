@@ -19,11 +19,11 @@ import lombok.experimental.Accessors;
  * @since 2020-05-04
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode()
 @Accessors(chain = true)
 @TableName("system_role_authority")
 @ApiModel(value="RoleAuthority对象", description="")
-public class RoleAuthority extends BaseEntity {
+public class RoleAuthority{
 
     private static final long serialVersionUID=1L;
 

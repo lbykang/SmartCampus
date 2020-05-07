@@ -8,7 +8,12 @@ spring:
     url: jdbc:mysql://localhost:3306/citymis?serverTimezone=GMT%2B8&amp&useSSL=false&autoReconnect=true&failOverReadOnly=false
     username: root
     password: mirror6
-
+  #热部署
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
     # 使用德鲁伊数据源
     type: com.alibaba.druid.pool.DruidDataSource
     # 连接池的配置信息
@@ -68,6 +73,7 @@ mybatis-plus:
 #logging:
 #  level:
 #    com.mybatis.plus.demo.mapper: debug
+
 
 
 

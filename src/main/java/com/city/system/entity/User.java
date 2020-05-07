@@ -6,26 +6,32 @@ import com.city.system.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author mirror6
  * @since 2020-05-04
  */
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@NoArgsConstructor
 @TableName("system_user")
-@ApiModel(value="User对象", description="")
+@ApiModel(value = "User对象", description = "")
 public class User extends BaseEntity {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "账号（学号、工号）")
     private String account;
@@ -48,8 +54,9 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 
-
-    public User(String account, String password, String salt, String name, Long gender, String tel, String email) {
+    @Builder
+    public User(Long id, int enabled, Long createUserId, Date gmtCreate, Long updateUserId, Date gmtModified, int deleted, String account, String password, String salt, String name, Long gender, String tel, String email) {
+        super(id, enabled, createUserId, gmtCreate, updateUserId, gmtModified, deleted);
         this.account = account;
         this.password = password;
         this.salt = salt;

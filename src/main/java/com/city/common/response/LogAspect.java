@@ -1,4 +1,4 @@
-package com.city.common.util;
+package com.city.common.response;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

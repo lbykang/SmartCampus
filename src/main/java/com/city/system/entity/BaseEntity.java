@@ -1,7 +1,10 @@
 package com.city.system.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -9,6 +12,8 @@ import java.util.Date;
  * @author mirror6
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseEntity {
 
     @TableId()
