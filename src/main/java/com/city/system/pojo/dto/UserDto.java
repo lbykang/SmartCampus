@@ -34,4 +34,7 @@ public class UserDto extends BaseEntity {
 
     @ApiModelProperty(value = "电子邮箱")
     private String email;
+
+    @ApiModelProperty(value = "角色")
+    private Long[] roleIds;
 }

@@ -59,8 +59,18 @@ spring:
 
 #mybatis扫描设置
 mybatis-plus:
-  mapper-locations: classpath*:com/city/system/mapper/*.xml
-  #config-location: classpath:mybatis/mybatis-config.xml
+  #mapper.xml所在位置
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #全局逻辑删除字段值 3.3.0开始支持
+      logic-delete-field: is_deleted
+      # 逻辑已删除值(默认为 1)
+      logic-delete-value: 1
+      # 逻辑未删除值(默认为 0)
+      logic-not-delete-value: 0
 
 #pagehelper分页插件配置
 #pagehelper:

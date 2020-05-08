@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * <p>
  * 服务类
@@ -48,8 +51,11 @@ public interface IUserService extends IService<User> {
      *
      * @param userDto 参数
      * @return result
+     * @throws NoSuchAlgorithmException 没有这样的算法
+     * @throws InvalidKeySpecException  密钥无效
      */
-    Result addUser(UserDto userDto);
+    Result addUser(UserDto userDto) throws NoSuchAlgorithmException, InvalidKeySpecException;
+
 
     /**
      * 删除用户
@@ -94,11 +100,9 @@ public interface IUserService extends IService<User> {
     /**
      * 修改密码
      *
-     * @param id          用户主键
-     * @param oldPassword 旧密码
-     * @param newPassword 新密码
+     * @param userDto 参数
      * @return result
      */
-    Result updatePassword(Long id, String oldPassword, String newPassword);
+    Result updatePassword(UserDto userDto);
 
 }

@@ -1,6 +1,7 @@
 package com.city.system.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,29 +18,30 @@ import java.util.Date;
 public class BaseEntity {
 
     @TableId()
+    @ApiModelProperty(value = "主键")
     private Long id;
 
-    /**
-     * 默认0
-     */
     @TableField(value = "is_enabled")
-    private int enabled;
+    @ApiModelProperty(value = "是否启用：1 表示禁用，0 表示启用")
+    private Integer enabled;
 
+    @ApiModelProperty(value = "创建人主键")
     private Long createUserId;
 
+    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
+    @ApiModelProperty(value = "修改人主键")
     private Long updateUserId;
 
+    @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
-    /**
-     * 默认0
-     */
     @TableLogic
     @TableField(value = "is_deleted")
-    private int deleted;
+    @ApiModelProperty(value = "逻辑删除：1 表示删除，0 表示未删除")
+    private Integer deleted;
 
 }

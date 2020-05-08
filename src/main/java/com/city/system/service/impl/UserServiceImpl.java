@@ -1,18 +1,30 @@
 package com.city.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.city.common.constant.Constant;
 import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
+import com.city.common.security.PasswordEncryption;
 import com.city.system.entity.User;
+import com.city.system.entity.UserRole;
 import com.city.system.mapper.UserMapper;
+import com.city.system.mapper.UserRoleMapper;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
 import com.city.system.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import javafx.print.Collation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -28,6 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public User getUserByAccount(String account) {
@@ -54,41 +69,88 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserDto userDto) {
         User user = new User();
-        if (null != getUserByAccount("")) {
+        if (null != getUserByAccount(userDto.getAccount())) {
             return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，账号已存在");
-        } else if (null != getUserByEmail("")) {
+        } else if (null != userDto.getEmail() && null != getUserByEmail(userDto.getEmail())) {
             return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，邮箱已存在");
-        } else if (null != getUserByTel("")) {
+        } else if (null != userDto.getTel() && null != getUserByTel(userDto.getTel())) {
             return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，手机号码已存在");
         } else {
             //拷贝
+            userDto.setRoleIds(new Long[]{1L});
             BeanUtils.copyProperties(userDto, user);
-            //盐和密码,权限
-            int code = userMapper.insert(user) > 0 ? 200 : -1;
+            //盐和密码
+            try {
+                String salt = PasswordEncryption.generateSalt();
+                String password = PasswordEncryption.getEncryptedPassword(user.getAccount(), salt);
+                user.setSalt(salt);
+                //32位密文
+                user.setPassword(password);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            user.setCreateUserId(1L);
+            int userCount = userMapper.insert(user);
+            int relationship = insertUserRoleBatch(user, userDto.getRoleIds());
+            int code = userCount > 0 && relationship > 0 ? 200 : -1;
             return ResponseFactory.build(code, 1, "操作成功", user);
         }
+    }
+
+
+    /**
+     * 批量插入 用户-角色关联关系
+     *
+     * @param user    用户
+     * @param roleIds 角色主键
+     * @return int
+     */
+    private int insertUserRoleBatch(User user, Long[] roleIds) {
+        List<UserRole> userRoles = new LinkedList<>();
+        for (Long roleId : roleIds) {
+            UserRole userRole = UserRole.builder().userId(user.getId()).roleId(roleId).build();
+            userRoles.add(userRole);
+        }
+        return userRoleMapper.insertBatch(userRoles);
     }
 
     @Override
     public Result deleteUser(Long id) {
         QueryWrapper wrapper = new QueryWrapper();
-        //eq是什么用途
+        //eq是where条件
         wrapper.eq("id", id);
-        User user = User.builder().id(id).build();
-        int code = userMapper.update(user, wrapper) > 0 ? 200 : -1;
+        User user = new User();
+        user.setDeleted(Constant.LOGIC_DELETE);
+        user.setId(id);
+        int code = userMapper.updateById(user) > 0 ? 200 : -1;
         return ResponseFactory.build(code, 1, "操作成功", user);
     }
 
     @Override
     public Result deleteUserBatch(Long[] ids) {
+
         return null;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result updateUser(UserDto userDto) {
-        return null;
+        User user = new User();
+        BeanUtils.copyProperties(userDto, user);
+        int userCount = userMapper.updateById(user);
+        // 修改关系表
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("user_id", user.getId());
+        // 删除全部关联表
+        userRoleMapper.delete(wrapper);
+        // 插入关系表
+        userDto.setRoleIds(new Long[]{1L, 3L});
+        int relationCount = insertUserRoleBatch(user, userDto.getRoleIds());
+        int code = userCount > 0 && relationCount > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", user);
     }
 
     @Override
@@ -97,6 +159,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = userMapper.selectById(id);
         BeanUtils.copyProperties(user, userDto);
         //权限
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("user_id", id);
+        List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
+        List<Long> roleIdList = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        Long[] roleIds = new Long[roleIdList.size()];
+        for (int i = 0; i < roleIdList.size(); i++) {
+            roleIds[i] = roleIdList.get(i);
+        }
+        userDto.setRoleIds(roleIds);
         return userDto;
     }
 
@@ -106,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Result updatePassword(Long id, String oldPassword, String newPassword) {
+    public Result updatePassword(UserDto userDto) {
         return null;
     }
 }

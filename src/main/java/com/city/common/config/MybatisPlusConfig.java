@@ -23,12 +23,5 @@ public class MybatisPlusConfig {
         return page;
     }
 
-    // 逻辑删除组件！
-    @Bean
-    public ISqlInjector sqlInjector() {
-        return new LogicSqlInjector();
-    }
-
-
 }
 
