@@ -1,6 +1,8 @@
 package com.city.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.city.common.constant.Constant;
 import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
@@ -21,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -119,20 +119,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result deleteUser(Long id) {
-        QueryWrapper wrapper = new QueryWrapper();
-        //eq是where条件
-        wrapper.eq("id", id);
-        User user = new User();
-        user.setDeleted(Constant.LOGIC_DELETE);
-        user.setId(id);
-        int code = userMapper.updateById(user) > 0 ? 200 : -1;
-        return ResponseFactory.build(code, 1, "操作成功", user);
+        int code = userMapper.deleteById(id) > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
     @Override
     public Result deleteUserBatch(Long[] ids) {
-
-        return null;
+        int code = userMapper.deleteBatchIds(Arrays.asList(ids)) > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
     @Override
@@ -140,16 +134,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result updateUser(UserDto userDto) {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
-        int userCount = userMapper.updateById(user);
-        // 修改关系表
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("user_id", user.getId());
-        // 删除全部关联表
-        userRoleMapper.delete(wrapper);
-        // 插入关系表
-        userDto.setRoleIds(new Long[]{1L, 3L});
-        int relationCount = insertUserRoleBatch(user, userDto.getRoleIds());
-        int code = userCount > 0 && relationCount > 0 ? 200 : -1;
+        //判断是否修改角色
+        Map<String, Object> columnMap = new HashMap<String, Object>();
+        columnMap.put("user_id", userDto.getId());
+        List oldRoleIds = userRoleMapper.selectByMap(columnMap).stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        int code;
+        int userCount;
+        if (!Arrays.asList(userDto.getRoleIds()).equals(oldRoleIds)) {
+            // 修改关系表
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("user_id", user.getId());
+            // 删除全部关联表
+            userRoleMapper.delete(wrapper);
+            // 插入关系表
+            userDto.setRoleIds(new Long[]{1L, 3L});
+            int relationCount = insertUserRoleBatch(user, userDto.getRoleIds());
+            userCount = userMapper.updateById(user);
+            code = userCount > 0 && relationCount > 0 ? 200 : -1;
+        } else {
+            userCount = userMapper.updateById(user);
+            code = userCount > 0 ? 200 : -1;
+        }
         return ResponseFactory.build(code, 1, "操作成功", user);
     }
 
@@ -173,11 +178,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result getUserList(UserQuery userQuery) {
-        return null;
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.select("account", "name", "gender", "tel", "email", "is_enabled", "gmt_create");
+        wrapper.orderByDesc("gmt_create");
+        Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(1),
+                Optional.ofNullable(userQuery.getPageSize()).orElse(10));
+        IPage<User> userIPage = userMapper.selectPage(page, wrapper);
+        return ResponseFactory.build(Optional.ofNullable(userIPage).orElse(new Page<>()));
     }
 
     @Override
     public Result updatePassword(UserDto userDto) {
-        return null;
+        User user = User.builder().id(userDto.getId()).password(userDto.getPassword()).build();
+        int code = userMapper.updateById(user);
+        return ResponseFactory.build(code, 1, "操作成功", userDto);
     }
 }
