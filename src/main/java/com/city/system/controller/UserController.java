@@ -72,7 +72,7 @@ public class UserController {
     @GetMapping("getUserList")
     @ApiOperation(value = "获取用户信息列表", notes = "用户列表", httpMethod = "GET")
     public Result getUserList(UserQuery userQuery) {
-        return ResponseFactory.build(iUserService.getUserList(userQuery));
+        return iUserService.getUserList(userQuery);
     }
 
 }

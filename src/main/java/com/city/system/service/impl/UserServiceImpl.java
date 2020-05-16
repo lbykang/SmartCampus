@@ -179,7 +179,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Result getUserList(UserQuery userQuery) {
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.select("account", "name", "gender", "tel", "email", "is_enabled", "gmt_create");
+        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled", "gmt_create");
         wrapper.orderByDesc("gmt_create");
         Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(1),
                 Optional.ofNullable(userQuery.getPageSize()).orElse(10));
