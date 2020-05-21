@@ -3,7 +3,7 @@ package com.city.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.city.common.constant.Constant;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
 import com.city.common.security.PasswordEncryption;
@@ -14,15 +14,11 @@ import com.city.system.mapper.UserRoleMapper;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
 import com.city.system.service.IUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import javafx.print.Collation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.stream.Collectors;
 
