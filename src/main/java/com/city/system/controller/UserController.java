@@ -1,6 +1,8 @@
 package com.city.system.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.city.system.entity.User;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
@@ -33,7 +35,8 @@ public class UserController {
     @PostMapping("addUser")
     @ApiOperation(value = "添加用户信息", notes = "添加用户", httpMethod = "POST")
     public Result addUser(@RequestBody String object) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        JSONObject userDto = JSON.parseObject(object, UserDto.class);
+        String data = JSON.parseObject(object).getString("data");
+        UserDto userDto = JSON.parseObject(data, UserDto.class);
         return ResponseFactory.build(iUserService.addUser(userDto));
     }
 
