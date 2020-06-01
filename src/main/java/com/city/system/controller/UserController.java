@@ -32,7 +32,8 @@ public class UserController {
 
     @PostMapping("addUser")
     @ApiOperation(value = "添加用户信息", notes = "添加用户", httpMethod = "POST")
-    public Result addUser(UserDto userDto) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public Result addUser(@RequestBody String object) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        JSONObject userDto = JSON.parseObject(object, UserDto.class);
         return ResponseFactory.build(iUserService.addUser(userDto));
     }
 
