@@ -37,33 +37,33 @@ public class UserController {
     public Result addUser(@RequestBody String object) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String data = JSON.parseObject(object).getString("data");
         UserDto userDto = JSON.parseObject(data, UserDto.class);
-        return ResponseFactory.build(iUserService.addUser(userDto));
+        return iUserService.addUser(userDto);
     }
 
     @DeleteMapping("deleteUser/{id}")
     @ApiOperation(value = "删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
     public Result deleteUser(@PathVariable Long id) {
-        return ResponseFactory.build(iUserService.deleteUser(id));
+        return iUserService.deleteUser(id);
     }
 
 
     @DeleteMapping("deleteUserBatch")
     @ApiOperation(value = "批量删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
     public Result deleteUserBatch(@PathVariable Long[] ids) {
-        return ResponseFactory.build(iUserService.deleteUserBatch(ids));
+        return iUserService.deleteUserBatch(ids);
     }
 
 
     @PutMapping("updateUser")
     @ApiOperation(value = "修改用户信息", notes = "编辑用户", httpMethod = "PUT")
     public Result updateUser(UserDto userDto) {
-        return ResponseFactory.build(iUserService.updateUser(userDto));
+        return iUserService.updateUser(userDto);
     }
 
     @PutMapping("updatePassword")
     @ApiOperation(value = "修改用户密码", notes = "编辑密码", httpMethod = "PUT")
     public Result updatePassword(UserDto userDto) {
-        return ResponseFactory.build(iUserService.updatePassword(userDto));
+        return iUserService.updatePassword(userDto);
     }
 
 
