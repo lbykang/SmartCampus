@@ -83,6 +83,10 @@ mybatis-plus:
 #logging:
 #  level:
 #    com.mybatis.plus.demo.mapper: debug
+#security
+security:
+  basic:
+    enabled: true
 
 
 
