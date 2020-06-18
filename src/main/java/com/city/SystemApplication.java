@@ -21,9 +21,6 @@ import java.util.List;
 @SpringBootApplication
 public class SystemApplication extends WebMvcConfigurationSupport {
 
-
-
-
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
