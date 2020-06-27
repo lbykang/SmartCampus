@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
 import com.city.common.security.PasswordEncryption;
+import com.city.common.utils.SecurityUtils;
 import com.city.system.entity.User;
 import com.city.system.entity.UserRole;
 import com.city.system.mapper.UserMapper;
@@ -81,7 +82,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             //盐和密码
             try {
                 String salt = PasswordEncryption.generateSalt();
-                String password = PasswordEncryption.getEncryptedPassword(user.getAccount(), salt);
+                String password = SecurityUtils.encryptPassword(user.getAccount());
+//                PasswordEncryption.getEncryptedPassword(user.getAccount(), salt);
                 user.setSalt(salt);
                 //32位密文
                 user.setPassword(password);
