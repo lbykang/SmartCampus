@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return createLoginUser(user);
     }
 
-    public UserDetails createLoginUser(User user) {
+    private UserDetails createLoginUser(User user) {
         return new LoginUser(user);
     }
 }

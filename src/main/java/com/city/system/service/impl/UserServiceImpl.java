@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 String password = SecurityUtils.encryptPassword(user.getAccount());
 //                PasswordEncryption.getEncryptedPassword(user.getAccount(), salt);
                 user.setSalt(salt);
-                //32位密文
+                //80位密文
                 user.setPassword(password);
             } catch (Exception e) {
                 e.printStackTrace();
