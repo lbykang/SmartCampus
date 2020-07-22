@@ -7,12 +7,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.annotation.Resource;
 
 /**
  * @author 17666
  */
+@CrossOrigin
 @Configuration
 @EnableWebSecurity()
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -29,9 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
 //                .anyRequest().permitAll()
-//                .and().csrf().disable();
+                .and().csrf().disable();
 
     }
 
