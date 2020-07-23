@@ -56,7 +56,9 @@ public class UserController {
 
     @PutMapping("updateUser")
     @ApiOperation(value = "修改用户信息", notes = "编辑用户", httpMethod = "PUT")
-    public Result updateUser(UserDto userDto) {
+    public Result updateUser(@RequestBody String object) {
+        String data = JSON.parseObject(object).getString("data");
+        UserDto userDto = JSON.parseObject(data, UserDto.class);
         return iUserService.updateUser(userDto);
     }
 

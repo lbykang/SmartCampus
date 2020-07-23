@@ -22,7 +22,7 @@ public class BaseEntity {
     private Long id;
 
     @TableField(value = "is_enabled")
-    @ApiModelProperty(value = "是否启用：1 表示禁用，0 表示启用")
+    @ApiModelProperty(value = "是否启用：1 表示禁用，0 表示启用。默认：0")
     private Integer enabled;
 
     @ApiModelProperty(value = "创建人主键")
@@ -41,7 +41,7 @@ public class BaseEntity {
 
     @TableLogic
     @TableField(value = "is_deleted")
-    @ApiModelProperty(value = "逻辑删除：1 表示删除，0 表示未删除")
+    @ApiModelProperty(value = "逻辑删除：1 表示删除，0 表示未删除。默认：0")
     private Integer deleted;
 
 }

@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User getUserByAccount(String account) {
-        User user = User.builder().account(account).build();
+        User user = User.builder().account(account).deleted(0).build();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
         return userMapper.selectOne(wrapper);
@@ -51,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User getUserByEmail(String email) {
-        User user = User.builder().email(email).build();
+        User user = User.builder().email(email).deleted(0).build();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
         return userMapper.selectOne(wrapper);
@@ -59,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User getUserByTel(String tel) {
-        User user = User.builder().tel(tel).build();
+        User user = User.builder().tel(tel).deleted(0).build();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
         return userMapper.selectOne(wrapper);

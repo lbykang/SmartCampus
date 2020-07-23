@@ -51,7 +51,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Builder
-    public User(Long id, int enabled, Long createUserId, Date gmtCreate, Long updateUserId, Date gmtModified, int deleted, String account, String password, String salt, String name, Long gender, String tel, String email) {
+    public User(Long id, Integer enabled, Long createUserId, Date gmtCreate, Long updateUserId, Date gmtModified, Integer deleted, String account, String password, String salt, String name, Long gender, String tel, String email) {
         super(id, enabled, createUserId, gmtCreate, updateUserId, gmtModified, deleted);
         this.account = account;
         this.password = password;
