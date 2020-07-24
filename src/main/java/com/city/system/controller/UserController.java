@@ -2,19 +2,19 @@ package com.city.system.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.city.system.entity.User;
+import com.city.common.response.ResponseFactory;
+import com.city.common.response.Result;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
 import com.city.system.service.IUserService;
-import com.city.common.response.ResponseFactory;
-import com.city.common.response.Result;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -35,8 +35,7 @@ public class UserController {
     @PostMapping("addUser")
     @ApiOperation(value = "添加用户信息", notes = "添加用户", httpMethod = "POST")
     public Result addUser(@RequestBody String object) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        String data = JSON.parseObject(object).getString("data");
-        UserDto userDto = JSON.parseObject(data, UserDto.class);
+        UserDto userDto = JSON.parseObject(object, UserDto.class);
         return iUserService.addUser(userDto);
     }
 
@@ -53,12 +52,18 @@ public class UserController {
         return iUserService.deleteUserBatch(ids);
     }
 
+    @DeleteMapping("deleteUser")
+    @ApiOperation(value = "删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
+    public Result deleteUser(@RequestBody String object) {
+        List<Long> array = JSON.parseArray(object,Long.class);
+        return iUserService.deleteUserBatch(array.toArray(new Long[0]));
+    }
+
 
     @PutMapping("updateUser")
     @ApiOperation(value = "修改用户信息", notes = "编辑用户", httpMethod = "PUT")
     public Result updateUser(@RequestBody String object) {
-        String data = JSON.parseObject(object).getString("data");
-        UserDto userDto = JSON.parseObject(data, UserDto.class);
+        UserDto userDto = JSON.parseObject(object, UserDto.class);
         return iUserService.updateUser(userDto);
     }
 
