@@ -1,6 +1,6 @@
 package com.city.system.service.impl;
 
-import com.city.system.entity.DictionaryData;
+import com.city.system.pojo.entity.DictionaryData;
 import com.city.system.mapper.DictionaryDataMapper;
 import com.city.system.service.IDictionaryDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

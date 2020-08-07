@@ -1,6 +1,6 @@
 package com.city.system.mapper;
 
-import com.city.system.entity.User;
+import com.city.system.pojo.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

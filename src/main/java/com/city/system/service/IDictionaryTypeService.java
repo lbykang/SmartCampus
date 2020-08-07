@@ -1,6 +1,6 @@
 package com.city.system.service;
 
-import com.city.system.entity.DictionaryType;
+import com.city.system.pojo.entity.DictionaryType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,6 +1,6 @@
 package com.city.system.service.impl;
 
-import com.city.system.entity.RoleAuthority;
+import com.city.system.pojo.entity.RoleAuthority;
 import com.city.system.mapper.RoleAuthorityMapper;
 import com.city.system.service.IRoleAuthorityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

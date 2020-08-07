@@ -1,10 +1,11 @@
 package com.city.system.service;
 
 import com.city.common.response.Result;
-import com.city.system.entity.User;
+import com.city.system.pojo.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
+import com.city.system.pojo.vo.UserVo;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,6 +19,13 @@ import java.security.spec.InvalidKeySpecException;
  * @since 2020-05-04
  */
 public interface IUserService extends IService<User> {
+
+    /**
+     * 判断是不是超级管理员
+     *
+     * @param account 账号
+     */
+    void isAdmin(String account);
 
 
     /**
@@ -49,12 +57,12 @@ public interface IUserService extends IService<User> {
     /**
      * 添加用户
      *
-     * @param userDto 参数
+     * @param userVo 参数
      * @return result
      * @throws NoSuchAlgorithmException 没有这样的算法
      * @throws InvalidKeySpecException  密钥无效
      */
-    Result addUser(UserDto userDto) throws NoSuchAlgorithmException, InvalidKeySpecException;
+    Result addUser(UserVo userVo) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
 
     /**
@@ -76,10 +84,19 @@ public interface IUserService extends IService<User> {
     /**
      * 修改用户
      *
-     * @param userDto 参数
+     * @param userVo 参数
      * @return result
      */
-    Result updateUser(UserDto userDto);
+    Result updateUser(UserVo userVo);
+
+
+    /**
+     * 修改用户状态
+     *
+     * @param userVo 参数
+     * @return result
+     */
+    Result updateUserStatus(UserVo userVo);
 
     /**
      * 查询用户

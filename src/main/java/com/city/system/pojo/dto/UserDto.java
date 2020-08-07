@@ -1,6 +1,6 @@
 package com.city.system.pojo.dto;
 
-import com.city.system.entity.BaseEntity;
+import com.city.system.pojo.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,6 @@
 package com.city.system.mapper;
 
-import com.city.system.entity.UserRole;
+import com.city.system.pojo.entity.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

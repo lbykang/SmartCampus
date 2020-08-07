@@ -1,6 +1,6 @@
 package com.city.system.service;
 
-import com.city.system.entity.UserRole;
+import com.city.system.pojo.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

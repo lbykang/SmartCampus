@@ -6,6 +6,7 @@ import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
+import com.city.system.pojo.vo.UserVo;
 import com.city.system.service.IUserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -34,37 +35,27 @@ public class UserController {
 
     @PostMapping("addUser")
     @ApiOperation(value = "添加用户信息", notes = "添加用户", httpMethod = "POST")
-    public Result addUser(@RequestBody String object) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        UserDto userDto = JSON.parseObject(object, UserDto.class);
-        return iUserService.addUser(userDto);
-    }
-
-    @DeleteMapping("deleteUser/{id}")
-    @ApiOperation(value = "删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
-    public Result deleteUser(@PathVariable Long id) {
-        return iUserService.deleteUser(id);
-    }
-
-
-    @DeleteMapping("deleteUserBatch")
-    @ApiOperation(value = "批量删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
-    public Result deleteUserBatch(@PathVariable Long[] ids) {
-        return iUserService.deleteUserBatch(ids);
+    public Result addUser(@RequestBody UserVo userVo) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        return iUserService.addUser(userVo);
     }
 
     @DeleteMapping("deleteUser")
     @ApiOperation(value = "删除用户信息", notes = "逻辑删除", httpMethod = "DELETE")
     public Result deleteUser(@RequestBody String object) {
-        List<Long> array = JSON.parseArray(object,Long.class);
+        List<Long> array = JSON.parseArray(object, Long.class);
         return iUserService.deleteUserBatch(array.toArray(new Long[0]));
     }
 
-
     @PutMapping("updateUser")
     @ApiOperation(value = "修改用户信息", notes = "编辑用户", httpMethod = "PUT")
-    public Result updateUser(@RequestBody String object) {
-        UserDto userDto = JSON.parseObject(object, UserDto.class);
-        return iUserService.updateUser(userDto);
+    public Result updateUser(@RequestBody UserVo userVo) {
+        return iUserService.updateUser(userVo);
+    }
+
+    @PutMapping("updateStatus")
+    @ApiOperation(value = "修改用户状态", notes = "编辑状态", httpMethod = "PUT")
+    public Result updateStatus(@RequestBody UserVo userVo) {
+        return iUserService.updateUserStatus(userVo);
     }
 
     @PutMapping("updatePassword")
@@ -72,7 +63,6 @@ public class UserController {
     public Result updatePassword(UserDto userDto) {
         return iUserService.updatePassword(userDto);
     }
-
 
     @GetMapping("getUser/{id}")
     @ApiOperation(value = "获取用户信息", notes = "用户详情", httpMethod = "GET")
@@ -83,6 +73,8 @@ public class UserController {
     @GetMapping("getUserList")
     @ApiOperation(value = "获取用户信息列表", notes = "用户列表", httpMethod = "GET")
     public Result getUserList(UserQuery userQuery) {
+        userQuery.setPageNum(1);
+        userQuery.setPageSize(10);
         return iUserService.getUserList(userQuery);
     }
 

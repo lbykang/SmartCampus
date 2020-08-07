@@ -1,6 +1,6 @@
 package com.city.system.mapper;
 
-import com.city.system.entity.DictionaryData;
+import com.city.system.pojo.entity.DictionaryData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

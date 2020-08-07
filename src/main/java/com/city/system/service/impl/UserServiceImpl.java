@@ -4,16 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.city.common.constant.UserConstant;
+import com.city.common.exception.CustomException;
 import com.city.common.response.ResponseFactory;
 import com.city.common.response.Result;
 import com.city.common.security.PasswordEncryption;
 import com.city.common.utils.SecurityUtils;
-import com.city.system.entity.User;
-import com.city.system.entity.UserRole;
+import com.city.common.utils.StringUtils;
+import com.city.system.pojo.entity.User;
+import com.city.system.pojo.entity.UserRole;
 import com.city.system.mapper.UserMapper;
 import com.city.system.mapper.UserRoleMapper;
 import com.city.system.pojo.dto.UserDto;
 import com.city.system.pojo.query.UserQuery;
+import com.city.system.pojo.vo.UserVo;
 import com.city.system.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -42,6 +46,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserRoleMapper userRoleMapper;
 
     @Override
+    public void isAdmin(String account) {
+        if (UserConstant.IS_ADMIN.equals(account)) {
+            throw new CustomException(-1, "不允许操作超级管理员用户");
+        }
+    }
+
+    @Override
     public User getUserByAccount(String account) {
         User user = User.builder().account(account).deleted(0).build();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -67,18 +78,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result addUser(UserDto userDto) {
+    public Result addUser(UserVo userVo) {
         User user = new User();
-        if (null != getUserByAccount(userDto.getAccount())) {
-            return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，账号已存在");
-        } else if (null != userDto.getEmail() && null != getUserByEmail(userDto.getEmail())) {
-            return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，邮箱已存在");
-        } else if (null != userDto.getTel() && null != getUserByTel(userDto.getTel())) {
-            return ResponseFactory.build(-1, "新增用户'" + userDto.getName() + "'失败，手机号码已存在");
+        if (null != getUserByAccount(userVo.getAccount())) {
+            return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，账号已存在");
+        } else if (null != userVo.getEmail() && null != getUserByEmail(userVo.getEmail())) {
+            return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，邮箱已存在");
+        } else if (null != userVo.getTel() && null != getUserByTel(userVo.getTel())) {
+            return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，手机号码已存在");
         } else {
             //拷贝
-            userDto.setRoleIds(new Long[]{1L});
-            BeanUtils.copyProperties(userDto, user);
+            userVo.setRoleIds(new Long[]{1L});
+            BeanUtils.copyProperties(userVo, user);
             //盐和密码
             try {
                 String salt = PasswordEncryption.generateSalt();
@@ -92,7 +103,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             }
             user.setCreateUserId(1L);
             int userCount = userMapper.insert(user);
-            int relationship = insertUserRoleBatch(user, userDto.getRoleIds());
+            int relationship = insertUserRoleBatch(user, userVo.getRoleIds());
             int code = userCount > 0 && relationship > 0 ? 200 : -1;
             return ResponseFactory.build(code, 1, "操作成功", user);
         }
@@ -129,30 +140,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result updateUser(UserDto userDto) {
+    public Result updateUser(UserVo userVo) {
+        //判断是不是超级管理员
+        isAdmin(userVo.getAccount());
         User user = new User();
-        BeanUtils.copyProperties(userDto, user);
+        BeanUtils.copyProperties(userVo, user);
         //判断是否修改角色
         Map<String, Object> columnMap = new HashMap<String, Object>();
-        columnMap.put("user_id", userDto.getId());
+        columnMap.put("user_id", userVo.getId());
         List oldRoleIds = userRoleMapper.selectByMap(columnMap).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         int code;
         int userCount;
-        if (!Arrays.asList(userDto.getRoleIds()).equals(oldRoleIds)) {
+        if (StringUtils.isNotEmpty(userVo.getRoleIds()) && !Arrays.asList(userVo.getRoleIds()).equals(oldRoleIds)) {
             // 修改关系表
             QueryWrapper wrapper = new QueryWrapper();
             wrapper.eq("user_id", user.getId());
             // 删除全部关联表
             userRoleMapper.delete(wrapper);
             // 插入关系表
-            userDto.setRoleIds(new Long[]{1L, 3L});
-            int relationCount = insertUserRoleBatch(user, userDto.getRoleIds());
+            userVo.setRoleIds(new Long[]{1L, 3L});
+            int relationCount = insertUserRoleBatch(user, userVo.getRoleIds());
             userCount = userMapper.updateById(user);
             code = userCount > 0 && relationCount > 0 ? 200 : -1;
         } else {
             userCount = userMapper.updateById(user);
             code = userCount > 0 ? 200 : -1;
         }
+        return ResponseFactory.build(code, 1, "操作成功", user);
+    }
+
+    @Override
+    public Result updateUserStatus(UserVo userVo) {
+        //判断是不是超级管理员
+        isAdmin(userVo.getAccount());
+        User user = new User();
+        BeanUtils.copyProperties(userVo, user);
+        int userCount = userMapper.updateById(user);
+        int code = userCount > 0 ? 200 : -1;
         return ResponseFactory.build(code, 1, "操作成功", user);
     }
 
@@ -177,7 +201,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Result getUserList(UserQuery userQuery) {
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled", "gmt_create");
+        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled as enabled", "gmt_create");
+        if (null != userQuery.getName()) {
+            wrapper.like("name", userQuery.getName());
+        }
+        if (null != userQuery.getTel()) {
+            wrapper.like("tel", userQuery.getTel());
+        }
+        if (null != userQuery.getEnabled()) {
+            wrapper.eq("is_enabled", userQuery.getEnabled());
+        }
+        if (null != userQuery.getGmtCreate()) {
+            wrapper.between("gmt_create", 1, 2);
+        }
         wrapper.orderByDesc("gmt_create");
         Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(1),
                 Optional.ofNullable(userQuery.getPageSize()).orElse(10));

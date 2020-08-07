@@ -8,7 +8,7 @@ import lombok.Data;
  * @createTime 2020/5/9 14:05
  */
 @Data
-public class BaseQuery {
+class BaseQuery {
 
     /**
      * 每页的数据数量

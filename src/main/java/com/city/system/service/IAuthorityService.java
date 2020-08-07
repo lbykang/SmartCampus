@@ -1,6 +1,6 @@
 package com.city.system.service;
 
-import com.city.system.entity.Authority;
+import com.city.system.pojo.entity.Authority;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

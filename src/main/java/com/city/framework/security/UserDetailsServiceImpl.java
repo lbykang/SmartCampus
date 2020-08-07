@@ -1,7 +1,7 @@
 package com.city.framework.security;
 
 import com.city.common.utils.StringUtils;
-import com.city.system.entity.User;
+import com.city.system.pojo.entity.User;
 import com.city.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
