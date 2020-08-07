@@ -36,5 +36,4 @@ public class Role extends BaseEntity {
     @ApiModelProperty(value = "排序码")
     private Boolean sort;
 
-
 }

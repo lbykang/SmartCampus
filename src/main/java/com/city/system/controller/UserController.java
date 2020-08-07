@@ -32,7 +32,6 @@ public class UserController {
     @Resource
     private IUserService iUserService;
 
-
     @PostMapping("addUser")
     @ApiOperation(value = "添加用户信息", notes = "添加用户", httpMethod = "POST")
     public Result addUser(@RequestBody UserVo userVo) throws InvalidKeySpecException, NoSuchAlgorithmException {
