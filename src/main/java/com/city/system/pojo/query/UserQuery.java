@@ -24,5 +24,5 @@ public class UserQuery extends BaseQuery {
 
     private Integer enabled;
 
-    private Date gmtCreate;
+    private Date[] gmtCreate;
 }

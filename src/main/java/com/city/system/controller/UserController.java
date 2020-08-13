@@ -72,10 +72,7 @@ public class UserController {
     @GetMapping("getUserList")
     @ApiOperation(value = "获取用户信息列表", notes = "用户列表", httpMethod = "GET")
     public Result getUserList(UserQuery userQuery) {
-        userQuery.setPageNum(1);
-        userQuery.setPageSize(10);
         return iUserService.getUserList(userQuery);
     }
-
 }
 

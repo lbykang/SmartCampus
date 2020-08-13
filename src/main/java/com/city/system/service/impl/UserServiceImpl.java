@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.city.common.constant.Constant;
 import com.city.common.constant.UserConstant;
 import com.city.common.exception.CustomException;
 import com.city.common.response.ResponseFactory;
@@ -215,8 +216,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             wrapper.between("gmt_create", 1, 2);
         }
         wrapper.orderByDesc("gmt_create");
-        Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(1),
-                Optional.ofNullable(userQuery.getPageSize()).orElse(10));
+        Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(Constant.INIT_PAGE_NUM),
+                Optional.ofNullable(userQuery.getPageSize()).orElse(Constant.INIT_PAGE_SIZE));
         IPage<User> userIPage = userMapper.selectPage(page, wrapper);
         return ResponseFactory.build(Optional.ofNullable(userIPage).orElse(new Page<>()));
     }
