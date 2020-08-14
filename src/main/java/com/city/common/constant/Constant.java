@@ -20,5 +20,5 @@ public class Constant {
     /**
      * 分页 初始数据量
      */
-    public static final Integer INIT_PAGE_SIZE = 3;
+    public static final Integer INIT_PAGE_SIZE = 10;
 }

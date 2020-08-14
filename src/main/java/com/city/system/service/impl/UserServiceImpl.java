@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
-
 
     @Resource
     private UserMapper userMapper;
@@ -212,8 +212,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (null != userQuery.getEnabled()) {
             wrapper.eq("is_enabled", userQuery.getEnabled());
         }
-        if (null != userQuery.getGmtCreate()) {
-            wrapper.between("gmt_create", 1, 2);
+        if(StringUtils.isNotEmpty(userQuery.getGmtCreate())){
+            String before = userQuery.getGmtCreate().split("&")[0];
+            String after = userQuery.getGmtCreate().split("&")[1];
+            if (StringUtils.isNotEmpty(before) && StringUtils.isNotEmpty(after)) {
+                wrapper.between("gmt_create", before, after);
+            }
         }
         wrapper.orderByDesc("gmt_create");
         Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(Constant.INIT_PAGE_NUM),
