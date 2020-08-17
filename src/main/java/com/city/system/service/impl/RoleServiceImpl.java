@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -38,6 +39,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     @Override
     public Result addRole(RoleVo roleVo) {
         Role role = new Role();
+        role.setCreateUserId(1L);
         BeanUtils.copyProperties(roleVo, role);
         int code = roleMapper.insert(role) > 0 ? 200 : -1;
         return ResponseFactory.build(code, 1, "操作成功", role);
@@ -45,17 +47,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public Result deleteRole(Long id) {
-        return null;
+        int code = roleMapper.deleteById(id) > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
     @Override
     public Result deleteRoleBatch(Long[] ids) {
-        return null;
+        int code = roleMapper.deleteBatchIds(Arrays.asList(ids)) > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
     @Override
     public Result updateRole(RoleVo roleVo) {
-        return null;
+        //角色-权限 管理
+        Role role = new Role();
+        BeanUtils.copyProperties(roleVo, role);
+        int count = roleMapper.updateById(role);
+        int code = count > 0 ? 200 : -1;
+        return ResponseFactory.build(code, 1, "操作成功", role);
     }
 
     @Override

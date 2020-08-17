@@ -4,14 +4,15 @@ package com.city.system.controller;
 import com.city.common.response.Result;
 import com.city.system.pojo.query.RoleQuery;
 import com.city.system.pojo.query.UserQuery;
+import com.city.system.pojo.vo.RoleVo;
+import com.city.system.pojo.vo.UserVo;
 import com.city.system.service.IRoleService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * <p>
@@ -27,6 +28,12 @@ public class RoleController {
 
     @Resource
     private IRoleService iRoleService;
+
+    @PostMapping("addRole")
+    @ApiOperation(value = "添加角色信息", notes = "添加角色", httpMethod = "POST")
+    public Result addRole(@RequestBody RoleVo roleVo) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        return iRoleService.addRole(roleVo);
+    }
 
     @GetMapping("getRoleList")
     @ApiOperation(value = "获取角色信息列表", notes = "角色列表", httpMethod = "GET")

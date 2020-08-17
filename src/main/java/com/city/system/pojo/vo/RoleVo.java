@@ -22,6 +22,6 @@ public class RoleVo extends BaseVo {
     private String description;
 
     @ApiModelProperty(value = "排序码")
-    private Boolean sort;
+    private Integer sort;
 
 }
