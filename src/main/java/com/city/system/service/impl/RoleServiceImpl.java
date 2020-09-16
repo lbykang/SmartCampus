@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <p>
@@ -74,12 +73,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public Result getRoleList(RoleQuery roleQuery) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.select("id", "name", "description", "sort", "is_enabled as enabled", "gmt_create");
-        wrapper.orderByDesc("gmt_create");
-        Page<Role> page = new Page<>(Optional.ofNullable(roleQuery.getPageNum()).orElse(1),
-                Optional.ofNullable(roleQuery.getPageSize()).orElse(10));
-        IPage<Role> rolePage = roleMapper.selectPage(page, wrapper);
-        return ResponseFactory.build(Optional.ofNullable(rolePage).orElse(new Page<>()));
+        List<Role> roles = roleMapper.selectList(null);
+        List<Map> res = new ArrayList<>();
+        for (Role role : roles) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("title", role.getName());
+            map.put("key", role.getId());
+            map.put("children", null);
+            res.add(map);
+        }
+        return ResponseFactory.build(res);
     }
 }

@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * @since 2020-05-04
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Resource
@@ -135,7 +136,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result deleteUserBatch(Long[] ids) {
-        int code = userMapper.deleteBatchIds(Arrays.asList(ids)) > 0 ? 200 : -1;
+        int userCode = userMapper.deleteBatchIds(Arrays.asList(ids));
+        int roleCode = userRoleMapper.deleteBatchIds(Arrays.asList(ids));
+        int code = userCode > 0 && roleCode > 0 ? 200 : -1;
         return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
@@ -201,29 +204,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result getUserList(UserQuery userQuery) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled as enabled", "gmt_create");
-        if (null != userQuery.getName()) {
-            wrapper.like("name", userQuery.getName());
-        }
-        if (null != userQuery.getTel()) {
-            wrapper.like("tel", userQuery.getTel());
-        }
-        if (null != userQuery.getEnabled()) {
-            wrapper.eq("is_enabled", userQuery.getEnabled());
-        }
-        if(StringUtils.isNotEmpty(userQuery.getGmtCreate())){
-            String before = userQuery.getGmtCreate().split("&")[0];
-            String after = userQuery.getGmtCreate().split("&")[1];
-            if (StringUtils.isNotEmpty(before) && StringUtils.isNotEmpty(after)) {
-                wrapper.between("gmt_create", before, after);
-            }
-        }
-        wrapper.orderByDesc("gmt_create");
+        User user = new User();
+        BeanUtils.copyProperties(userQuery, user);
+//        QueryWrapper wrapper = new QueryWrapper();
+//        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled as enabled", "gmt_create");
+//        if (null != userQuery.getName()) {
+//            wrapper.like("name", userQuery.getName());
+//        }
+//        if (null != userQuery.getTel()) {
+//            wrapper.like("tel", userQuery.getTel());
+//        }
+//        if (null != userQuery.getEnabled()) {
+//            wrapper.eq("is_enabled", userQuery.getEnabled());
+//        }
+//        if (StringUtils.isNotEmpty(userQuery.getGmtCreate())) {
+//            String before = userQuery.getGmtCreate().split("&")[0];
+//            String after = userQuery.getGmtCreate().split("&")[1];
+//            if (StringUtils.isNotEmpty(before) && StringUtils.isNotEmpty(after)) {
+//                wrapper.between("gmt_create", before, after);
+//            }
+//        }
+//        wrapper.orderByDesc("gmt_create");
         Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(Constant.INIT_PAGE_NUM),
                 Optional.ofNullable(userQuery.getPageSize()).orElse(Constant.INIT_PAGE_SIZE));
-        IPage<User> userIPage = userMapper.selectPage(page, wrapper);
-        return ResponseFactory.build(Optional.ofNullable(userIPage).orElse(new Page<>()));
+        IPage<User> userPage = userMapper.getUserList(page,user);
+        return ResponseFactory.build(Optional.ofNullable(userPage).orElse(new Page<>()));
     }
 
     @Override

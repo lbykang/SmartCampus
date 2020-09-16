@@ -1,5 +1,6 @@
 package com.city.system.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,6 +50,9 @@ public class User extends BaseEntity {
 
     @ApiModelProperty(value = "电子邮箱")
     private String email;
+
+    @ApiModelProperty(value = "角色主键")
+    private String roleIds;
 
     @Builder
     public User(Long id, Integer enabled, Long createUserId, Date gmtCreate, Long updateUserId, Date gmtModified, Integer deleted, String account, String password, String salt, String name, Long gender, String tel, String email) {

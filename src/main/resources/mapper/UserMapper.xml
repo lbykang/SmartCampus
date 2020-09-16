@@ -3,9 +3,48 @@
 <mapper namespace="com.city.system.mapper.UserMapper">
 
     <resultMap type="com.city.system.pojo.entity.User" id="userResultMap">
-        <id column="id" property="id" />
+        <id column="id" property="id"/>
         <result property="enabled" column="is_enabled"/>
         <result property="deleted" column="is_deleted"/>
+        <result property="roleIds" column="roleIds"/>
     </resultMap>
+
+    <select id="getUserList" resultMap="userResultMap">
+        SELECT
+        u.id,
+        u.account,
+        u.name,
+        u.gender,
+        u.tel,
+        u.email,
+        u.is_enabled,
+        u.gmt_create,
+        GROUP_CONCAT( r.id ) AS roleIds
+        FROM
+        system_user u
+        LEFT JOIN system_user_role ur ON ur.user_id = u.id
+        LEFT JOIN system_role r ON ur.role_id = r.id
+        WHERE
+        u.is_deleted = 0
+        <if test="user.name != null and user.name != ''">
+            AND u.name like concat('%', #{user.name}, '%')
+        </if>
+        <if test="user.tel != null and user.tel != ''">
+            AND u.tel like concat('%', #{user.tel}, '%')
+        </if>
+        <if test="user.enabled != null and user.enabled != ''">
+            AND u.is_enabled = #{user.enabled}
+        </if>
+        <!--        <if test="beginTime != null and beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
+        <!--            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')-->
+        <!--        </if>-->
+        <!--        <if test="endTime != null and endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
+        <!--            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')-->
+        <!--        </if>-->
+        GROUP BY
+        u.id
+        ORDER BY
+        gmt_create DESC
+    </select>
 
 </mapper>

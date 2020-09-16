@@ -36,7 +36,7 @@ public class RoleController {
     }
 
     @GetMapping("getRoleList")
-    @ApiOperation(value = "获取角色信息列表", notes = "角色列表", httpMethod = "GET")
+    @ApiOperation(value = "获取角色信息列表", notes = "添加用户时使用", httpMethod = "GET")
     public Result getRoleList(RoleQuery roleQuery) {
         roleQuery.setPageNum(1);
         roleQuery.setPageSize(10);

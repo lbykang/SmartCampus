@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-class BaseVo {
+public class BaseVo {
 
     @ApiModelProperty(value = "主键")
     private Long id;
