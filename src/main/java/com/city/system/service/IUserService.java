@@ -27,32 +27,14 @@ public interface IUserService extends IService<User> {
      */
     void isAdmin(String account);
 
-
     /**
-     * 通过账号获取用户信息 校验唯一
+     * 通过属性获取用户信息 校验唯一性
      *
-     * @param account 参数
+     * @param attribute 属性
+     * @param param     参数
      * @return User
      */
-    User getUserByAccount(String account);
-
-
-    /**
-     * 通过邮箱获取用户信息 校验唯一
-     *
-     * @param email 参数
-     * @return User
-     */
-    User getUserByEmail(String email);
-
-
-    /**
-     * 通过手机号码获取用户信息 校验唯一
-     *
-     * @param tel 参数
-     * @return User
-     */
-    User getUserByTel(String tel);
+    User getUserByUnique(String attribute, String param);
 
     /**
      * 添加用户
@@ -63,15 +45,6 @@ public interface IUserService extends IService<User> {
      * @throws InvalidKeySpecException  密钥无效
      */
     Result addUser(UserVo userVo) throws NoSuchAlgorithmException, InvalidKeySpecException;
-
-
-    /**
-     * 删除用户
-     *
-     * @param id 用户主键
-     * @return result
-     */
-    Result deleteUser(Long id);
 
     /**
      * 批量删除用户

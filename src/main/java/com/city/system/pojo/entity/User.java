@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * <p>
@@ -51,8 +52,13 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "角色主键")
     private String roleIds;
+
+
+    @ApiModelProperty(value = "时间过滤参数")
+    private Map<String, String> param;
 
     @Builder
     public User(Long id, Integer enabled, Long createUserId, Date gmtCreate, Long updateUserId, Date gmtModified, Integer deleted, String account, String password, String salt, String name, Long gender, String tel, String email) {
@@ -64,5 +70,6 @@ public class User extends BaseEntity {
         this.gender = gender;
         this.tel = tel;
         this.email = email;
+        this.param = param;
     }
 }

@@ -1,5 +1,6 @@
 package com.city.framework.security;
 
+import com.city.common.constant.UserConstant;
 import com.city.common.utils.StringUtils;
 import com.city.system.pojo.entity.User;
 import com.city.system.service.IUserService;
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.getUserByAccount(username);
+        User user = userService.getUserByUnique(UserConstant.ATTRIBUTE_ACCOUNT, username);
         if (StringUtils.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");

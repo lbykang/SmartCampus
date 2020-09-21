@@ -79,6 +79,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             Map<String, Object> map = new HashMap<>();
             map.put("title", role.getName());
             map.put("key", role.getId());
+            map.put("value", role.getId());
             map.put("children", null);
             res.add(map);
         }

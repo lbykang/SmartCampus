@@ -55,26 +55,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public User getUserByAccount(String account) {
-        User user = User.builder().account(account).deleted(0).build();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.setEntity(user);
-        return userMapper.selectOne(wrapper);
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        User user = User.builder().email(email).deleted(0).build();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.setEntity(user);
-        return userMapper.selectOne(wrapper);
-    }
-
-    @Override
-    public User getUserByTel(String tel) {
-        User user = User.builder().tel(tel).deleted(0).build();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.setEntity(user);
+    public User getUserByUnique(String attribute, String param) {
+        QueryWrapper wrapper = new QueryWrapper<>();
+        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled as enabled", "gmt_create");
+        wrapper.eq(attribute, param);
+        wrapper.eq("is_deleted", 0);
         return userMapper.selectOne(wrapper);
     }
 
@@ -82,15 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserVo userVo) {
         User user = new User();
-        if (null != getUserByAccount(userVo.getAccount())) {
+        if (null != getUserByUnique(UserConstant.ATTRIBUTE_ACCOUNT, userVo.getAccount())) {
             return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，账号已存在");
-        } else if (null != userVo.getEmail() && null != getUserByEmail(userVo.getEmail())) {
+        } else if (null != userVo.getEmail() && null != getUserByUnique(UserConstant.ATTRIBUTE_EMAIL, userVo.getEmail())) {
             return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，邮箱已存在");
-        } else if (null != userVo.getTel() && null != getUserByTel(userVo.getTel())) {
+        } else if (null != userVo.getTel() && null != getUserByUnique(UserConstant.ATTRIBUTE_TEL, userVo.getTel())) {
             return ResponseFactory.build(-1, "新增用户'" + userVo.getName() + "'失败，手机号码已存在");
         } else {
             //拷贝
-            userVo.setRoleIds(new Long[]{1L});
             BeanUtils.copyProperties(userVo, user);
             //盐和密码
             try {
@@ -126,12 +110,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             userRoles.add(userRole);
         }
         return userRoleMapper.insertBatch(userRoles);
-    }
-
-    @Override
-    public Result deleteUser(Long id) {
-        int code = userMapper.deleteById(id) > 0 ? 200 : -1;
-        return ResponseFactory.build(code, 1, "操作成功", null);
     }
 
     @Override
@@ -206,28 +184,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result getUserList(UserQuery userQuery) {
         User user = new User();
         BeanUtils.copyProperties(userQuery, user);
-//        QueryWrapper wrapper = new QueryWrapper();
-//        wrapper.select("id", "account", "name", "gender", "tel", "email", "is_enabled as enabled", "gmt_create");
-//        if (null != userQuery.getName()) {
-//            wrapper.like("name", userQuery.getName());
-//        }
-//        if (null != userQuery.getTel()) {
-//            wrapper.like("tel", userQuery.getTel());
-//        }
-//        if (null != userQuery.getEnabled()) {
-//            wrapper.eq("is_enabled", userQuery.getEnabled());
-//        }
-//        if (StringUtils.isNotEmpty(userQuery.getGmtCreate())) {
-//            String before = userQuery.getGmtCreate().split("&")[0];
-//            String after = userQuery.getGmtCreate().split("&")[1];
-//            if (StringUtils.isNotEmpty(before) && StringUtils.isNotEmpty(after)) {
-//                wrapper.between("gmt_create", before, after);
-//            }
-//        }
-//        wrapper.orderByDesc("gmt_create");
+        if (StringUtils.isNotEmpty(userQuery.getGmtCreate())) {
+            String before = userQuery.getGmtCreate().split("&")[0];
+            String after = userQuery.getGmtCreate().split("&")[1];
+            if (StringUtils.isNotEmpty(before) && StringUtils.isNotEmpty(after)) {
+                Map<String, String> map = new HashMap(2);
+                map.put("start", before);
+                map.put("end", after);
+                user.setParam(map);
+            }
+        }
         Page<User> page = new Page<>(Optional.ofNullable(userQuery.getPageNum()).orElse(Constant.INIT_PAGE_NUM),
                 Optional.ofNullable(userQuery.getPageSize()).orElse(Constant.INIT_PAGE_SIZE));
-        IPage<User> userPage = userMapper.getUserList(page,user);
+        IPage<User> userPage = userMapper.getUserList(page, user);
         return ResponseFactory.build(Optional.ofNullable(userPage).orElse(new Page<>()));
     }
 

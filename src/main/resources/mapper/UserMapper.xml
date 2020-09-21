@@ -32,15 +32,15 @@
         <if test="user.tel != null and user.tel != ''">
             AND u.tel like concat('%', #{user.tel}, '%')
         </if>
-        <if test="user.enabled != null and user.enabled != ''">
+        <if test="user.enabled != null ">
             AND u.is_enabled = #{user.enabled}
         </if>
-        <!--        <if test="beginTime != null and beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-        <!--            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')-->
-        <!--        </if>-->
-        <!--        <if test="endTime != null and endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-        <!--            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')-->
-        <!--        </if>-->
+        <if test="user.param != null and user.param.start != null and user.param.start  != ''">
+            AND date_format(u.gmt_create,'%y%m%d') &gt;= date_format(#{user.param.start},'%y%m%d')
+        </if>
+        <if test="user.param != null and user.param.end != null and user.param.end != ''">
+            AND date_format(u.gmt_create,'%y%m%d') &lt;= date_format(#{user.param.end},'%y%m%d')
+        </if>
         GROUP BY
         u.id
         ORDER BY
